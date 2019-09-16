@@ -446,8 +446,13 @@ func nodeContainerHostCert() ExecFlow {
 		requires: []string{"cacert"},
 	}
 	flow.forward = func(c *check.C, env *Environment) {
-		res := T("node-container-add", "hostcert", "--privileged", "--image", "tsuru/hostcert", "-r", "hostconfig.pidmode=host", "-r", "config.cmd.0="+env.Get("cacert")).WithNoExpand().Run(env)
+		res := T("node-container-add", "hostcert", "--privileged", "--image", "tsuru/hostcert", "-r", "hostconfig.pidmode=host", "-r", "config.cmd.0="+env.Get("cacert"), "--disable").WithNoExpand().Run(env)
 		c.Assert(res, ResultOk)
+		for _, cluster := range clusterManagers {
+			poolName := "ipool-" + cluster.Name()
+			res := T("node-container-add", "hostcert", "-o", poolName, "--enable").Run(env)
+			c.Assert(res, ResultOk)
+		}
 		res = T("node-container-upgrade", "hostcert", "-y").Run(env)
 		c.Assert(res, ResultOk)
 		// Wait for docker daemon restart in nodes
