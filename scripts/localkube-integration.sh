@@ -12,7 +12,6 @@ readonly HELM=${HELM:-helm}
 readonly KIND=${KIND:-kind}
 readonly KUBECTL=${KUBECTL:-kubectl}
 readonly TSURU=${TSURU:-./bin/tsuru}
-readonly KUSTOMIZE=${KUSTOMIZE:-kustomize}
 readonly MINIKUBE=${MINIKUBE:-minikube}
 
 readonly CLUSTER_PROVIDER=${CLUSTER_PROVIDER:-kind}
@@ -31,7 +30,7 @@ function onerror() {
 install_tsuru_stack() {
   ${HELM} repo add --force-update tsuru https://tsuru.github.io/charts
 
-  ${HELM} upgrade --install --atomic \
+  ${HELM} install --create-namespace \
     --namespace ${NAMESPACE} --version ${CHART_VERSION_TSURU_STACK} \
     --set tsuru-api.image.repository=localhost/tsuru/tsuru-api \
     --set tsuru-api.image.tag=integration \
