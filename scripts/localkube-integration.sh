@@ -11,7 +11,8 @@ readonly DOCKER=${DOCKER:-docker}
 readonly HELM=${HELM:-helm}
 readonly KIND=${KIND:-kind}
 readonly KUBECTL=${KUBECTL:-kubectl}
-readonly TSURU=${TSURU:-./bin/tsuru}
+readonly BINDIR=${BINDIR:-./bin}
+readonly TSURU=${TSURU:-${BINDIR}/tsuru}
 readonly MINIKUBE=${MINIKUBE:-minikube}
 
 readonly CLUSTER_PROVIDER=${CLUSTER_PROVIDER:-kind}
@@ -58,8 +59,8 @@ build_tsuru_api_container_image() {
 }
 
 set_initial_admin_password() {
-  ${KUBECTL} exec -it -n ${NAMESPACE} deploy/tsuru-api -- \
-    "echo $'123456\n123456' | tsurud root user create admin@admin.com"
+  ${KUBECTL} exec -n ${NAMESPACE} deploy/tsuru-api -- \
+    sh -c "echo $'123456\n123456' | /usr/local/bin/tsurud root user create admin@admin.com"
 }
 
 main() {
@@ -83,8 +84,10 @@ main() {
 
   sleep 5
 
-  curl -fsSL "https://tsuru.io/get" | bash
   set_initial_admin_password 
+
+  if [ ! -d bin ]; then mkdir bin ; fi
+  curl -fsSL "https://tsuru.io/get" | bash -s -- -b ${BINDIR}
 
   TSURU_TARGET="http://127.0.0.1:${local_tsuru_api_port}" 
   echo "123456" | ${TSURU} login admin@admin.com
