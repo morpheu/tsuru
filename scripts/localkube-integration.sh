@@ -21,11 +21,15 @@ readonly NAMESPACE=${NAMESPACE:-tsuru-system}
 readonly CHART_VERSION_TSURU_STACK=${CHART_VERSION_TSURU_STACK:-0.5.3}
 
 function onerror() {
+  set -e
   echo "TSURU API LOGS:"
   ${KUBECTL} logs -n ${NAMESPACE} deploy/tsuru-api|| true
   echo
-
+  ${KUBECTL} get pods -A
+  echo
+  ${KUBECTL} get services -A
   [[ -n ${kubectl_port_forward_pid} ]] && kill ${kubectl_port_forward_pid}
+  set +e
 }
 
 install_tsuru_stack() {
