@@ -40,7 +40,7 @@ install_tsuru_stack() {
     --set tsuru-api.image.repository=localhost/tsuru/tsuru-api \
     --set tsuru-api.image.tag=integration \
     --set tsuru-api.image.pullPolicy=Never \
-    --timeout 10m \
+    --timeout 10m --wait \
     tsuru tsuru/tsuru-stack
 }
 
