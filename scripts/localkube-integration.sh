@@ -33,6 +33,8 @@ function onerror() {
 }
 
 install_tsuru_stack() {
+  trap onerror ERR
+
   ${HELM} repo add --force-update tsuru https://tsuru.github.io/charts
 
   ${HELM} install --create-namespace \
@@ -69,6 +71,8 @@ set_initial_admin_password() {
 }
 
 main() {
+  trap onerror ERR
+
   ${KUBECTL} cluster-info
   ${KUBECTL} get all
 
@@ -81,7 +85,6 @@ main() {
 
   sleep 5
 
-  trap onerror ERR
 
   local_tsuru_api_port=8080
   ${KUBECTL} -n ${NAMESPACE} port-forward svc/tsuru-api ${local_tsuru_api_port}:80 --address=127.0.0.1 &
