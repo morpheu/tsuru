@@ -90,14 +90,11 @@ main() {
   fi
   install_tsuru_stack
 
-  sleep 5
-
+  sleep 30
 
   local_tsuru_api_port=8080
   ${KUBECTL} -n ${NAMESPACE} port-forward svc/tsuru-api ${local_tsuru_api_port}:80 --address=127.0.0.1 &
   kubectl_port_forward_pid=${!}
-
-  sleep 5
 
   set_initial_admin_password 
 
