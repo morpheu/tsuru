@@ -37,7 +37,6 @@ jobs:
           TSURU_INTEGRATION_targetaddr: "http://localhost:8080"
           TSURU_INTEGRATION_adminuser: "admin@admin.com"
           TSURU_INTEGRATION_adminpassword: "123456"
-          PATH: "$PATH:./integration/bin"
         run: |
           ./scripts/localkube-integration.sh
-          make test-int
+          PATH=$PATH:./integration/bin make test-int
