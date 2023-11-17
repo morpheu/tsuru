@@ -34,7 +34,7 @@ jobs:
           GOPATH: /tmp/go
           CLUSTER_PROVIDER: minikube
           DEBUG: "true"
-          TSURU_INTEGRATION_targetaddr: "http://localhost:8080"
+          TSURU_INTEGRATION_targetaddr: "http://127.0.0.1:8080"
           TSURU_INTEGRATION_adminuser: "admin@admin.com"
           TSURU_INTEGRATION_adminpassword: "123456"
         run: |
