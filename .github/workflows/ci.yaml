@@ -36,3 +36,4 @@ jobs:
           DEBUG: "true"
         run: |
           ./scripts/localkube-integration.sh
+          make test-int
