@@ -101,7 +101,7 @@ main() {
   if [ ! -d bin ]; then mkdir bin ; fi
   curl -fsSL "https://tsuru.io/get" | bash -s -- -b ${BINDIR}
 
-  TSURU_TARGET="http://127.0.0.1:${local_tsuru_api_port}" 
+  export TSURU_TARGET="http://127.0.0.1:${local_tsuru_api_port}"
   echo "123456" | ${TSURU} login admin@admin.com
 
   PATH=$PATH:$PWD/bin make test-int
