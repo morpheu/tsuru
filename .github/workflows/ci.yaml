@@ -39,4 +39,4 @@ jobs:
           TSURU_INTEGRATION_adminpassword: "123456"
         run: |
           ./scripts/localkube-integration.sh
-          PATH=$PATH:./integration/bin make test-int
+          PATH=$PATH:./scripts/bin make test-int
