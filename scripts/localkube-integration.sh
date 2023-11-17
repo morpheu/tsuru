@@ -42,7 +42,7 @@ install_tsuru_stack() {
     --set tsuru-api.image.repository=localhost/tsuru/tsuru-api \
     --set tsuru-api.image.tag=integration \
     --set tsuru-api.image.pullPolicy=Never \
-    --set tsuru-api.service.type=ClusterIP
+    --set tsuru-api.service.type=ClusterIP \
     --timeout 5m  --debug \
     tsuru tsuru/tsuru-stack
 }
