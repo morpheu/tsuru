@@ -44,7 +44,7 @@ install_tsuru_stack() {
     --set tsuru-api.image.tag=integration \
     --set tsuru-api.image.pullPolicy=Never \
     --set tsuru-api.service.type=ClusterIP \
-    --timeout 5m  --debug \
+    --timeout 5m  \
     tsuru tsuru/tsuru-stack
 }
 
@@ -68,6 +68,7 @@ build_tsuru_api_container_image() {
 }
 
 set_initial_admin_password() {
+  trap onerror ERR
   ${KUBECTL} exec -n ${NAMESPACE} deploy/tsuru-api -- \
     sh -c "echo $'123456\n123456' | /usr/local/bin/tsurud root user create admin@admin.com"
 }
