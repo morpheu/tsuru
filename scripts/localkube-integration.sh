@@ -18,7 +18,7 @@ readonly MINIKUBE=${MINIKUBE:-minikube}
 readonly CLUSTER_PROVIDER=${CLUSTER_PROVIDER:-kind}
 readonly NAMESPACE=${NAMESPACE:-tsuru-system}
 
-readonly CHART_VERSION_TSURU_STACK=${CHART_VERSION_TSURU_STACK:-0.5.3}
+readonly CHART_VERSION_TSURU_STACK=${CHART_VERSION_TSURU_STACK:-0.5.5}
 
 function onerror() {
   set -e
@@ -29,6 +29,7 @@ function onerror() {
   echo
   ${KUBECTL} get services -A
   [[ -n ${kubectl_port_forward_pid} ]] && kill ${kubectl_port_forward_pid}
+  [[ -n ${minikube_tunnel_pid} ]] && kill ${minikube_tunnel_pid}
   set +e
 }
 
@@ -82,6 +83,10 @@ main() {
 
   build_tsuru_api_container_image
 
+  if [ "${CLUSTER_PROVIDER}" == "minikube" ]; then
+    ${MINIKUBE} tunnel &
+    minikube_tunnel_pid=${!}
+  fi
   install_tsuru_stack
 
   sleep 5
@@ -101,7 +106,8 @@ main() {
   TSURU_TARGET="http://127.0.0.1:${local_tsuru_api_port}" 
   echo "123456" | ${TSURU} login admin@admin.com
 
-  kill ${kubectl_port_forward_pid}
+  [[ -n ${kubectl_port_forward_pid} ]] && kill ${kubectl_port_forward_pid}
+  [[ -n ${minikube_tunnel_pid} ]] && kill ${minikube_tunnel_pid}
 }
 
 main $@
