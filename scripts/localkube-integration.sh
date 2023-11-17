@@ -104,6 +104,8 @@ main() {
   TSURU_TARGET="http://127.0.0.1:${local_tsuru_api_port}" 
   echo "123456" | ${TSURU} login admin@admin.com
 
+  PATH=$PATH:$PWD/bin make test-int
+
   [[ -n ${kubectl_port_forward_pid} ]] && kill ${kubectl_port_forward_pid}
   [[ -n ${minikube_tunnel_pid} ]] && kill ${minikube_tunnel_pid}
 }
